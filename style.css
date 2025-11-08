@@ -1,0 +1,29 @@
+@font-face {
+    font-family: "roboto";
+    src: 
+        url("./fonts/roboto-variablefont_wdthwght-webfont.woff2") format("woff2"),
+        url("./fonts/roboto-variablefont_wdthwght-webfont.woff") format("woff");
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    font-family: "roboto", sans-serif;
+}
+
+#container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    border: 2px solid black;
+    padding: 10px;
+    gap: 10px;
+}
