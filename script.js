@@ -8,25 +8,45 @@ let inputCheck = "";
 // array to store book objects
 const myLibrary = [];
 
-// constructor to create book object
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages + " pages";
-    this.read = read;
-    this.id = crypto.randomUUID();
-}
+// class to create book objects and methods to perform on those objects
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages + " pages";
+        this.read = read;
+        this.id = crypto.randomUUID();
+    };
 
-// function to push book objects into library array
-function addBookToLibrary(title, author, pages, read) {
-    let book = new Book(title, author, pages, read);
-    myLibrary.push(book);
-}
+    addBookToLibrary(library) {
+        library.push(this);
+    };
+
+    removeBook(array, id) {
+        const index = array.findIndex(obj => obj.id === id);
+        if (index !== -1) {
+            array.splice(index, 1);
+        } return array;
+    };
+
+    switchReadStatus(status) {
+        if (status.textContent === "Read") {
+            status.classList = "not-read";
+            status.textContent = "Not Read";
+        } else if (status.textContent === "Not Read") {
+            status.classList = "read";
+            status.textContent = "Read";
+        };
+    };
+};
 
 // default books in library
-addBookToLibrary("The Hobbit", "JRR Tolkien", "300", "Not Read");
-addBookToLibrary("Lord of the Rings", "JRR Tolkien", "1178", "Not Read");
-addBookToLibrary("Artemis Fowl", "Eoin Colfer", "320", "Read");
+const book1 = new Book("The Hobbit", "JRR Tolkien", "300", "Not Read");
+const book2 = new Book("Lord of the Rings", "JRR Tolkien", "1178", "Not Read");
+const book3 = new Book("Artemis Fowl", "Eoin Colfer", "320", "Read");
+book1.addBookToLibrary(myLibrary);
+book2.addBookToLibrary(myLibrary);
+book3.addBookToLibrary(myLibrary);
 
 
 // button event to create input form
@@ -100,7 +120,8 @@ newButton.addEventListener("click", () => {
                 read = "Not Read";
             };
 
-            addBookToLibrary(title, author, pages, read);
+            const book = new Book(title, author, pages, read);
+            book.addBookToLibrary(myLibrary);
             
             input.removeChild(createForm);
             input.removeChild(submitButton);
@@ -122,25 +143,6 @@ newButton.addEventListener("click", () => {
         ;
     };
 });
-
-// function that searches through library array for matching IDs
-function removeBook(array, id) {
-    const index = array.findIndex(obj => obj.id === id);
-    if (index !== -1) {
-        array.splice(index, 1);
-    } return array;
-};
-
-// function that rotates class and text content of the read value of book objects
-function switchReadStatus(status) {
-    if (status.textContent === "Read") {
-        status.classList = "not-read";
-        status.textContent = "Not Read";
-    } else if (status.textContent === "Not Read") {
-        status.classList = "read";
-        status.textContent = "Read";
-    }
-}
 
 // function to output the library book objects as cards in the container div
 function displayLibrary() {
@@ -170,11 +172,11 @@ function displayLibrary() {
         };
 
         itemRead.addEventListener("click", () => {
-            switchReadStatus(itemRead);
+            book.switchReadStatus(itemRead);
         });
 
         itemDelete.addEventListener("click", () => {
-            removeBook(myLibrary, itemID);
+            book.removeBook(myLibrary, itemID);
             displayLibrary();
         });
 
