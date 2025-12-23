@@ -10,10 +10,29 @@
 <body>
     <div id="content">
         <div id="input">
-            <button id="new">New Book+</button>
+            <h1>New Book</h1>
+            <form id="new-book" novalidate>
+                <div>
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div>
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" name="author" required>
+                </div>
+                <div>
+                    <label for="pages"># of Pages:</label>
+                    <input type="number" min="1" max="41000" id="pages" name="pages" required>
+                </div>
+                <div>
+                    <label for="read">Read?</label>
+                    <input type="checkbox" id="read" name="read">
+                </div>
+            </form>
+            <button id="submit">Submit</button>
         </div>
-        <div id="container">
-        </div>
+
+        <div id="container"></div>
     </div>
     <script src="./script.js"></script>
 </body>

@@ -12,9 +12,13 @@ body {
 }
 
 button {
-    width: 150px;
+    width: fit-content;
     padding: 5px 20px;
     border-radius: 10px;
+}
+
+#new {
+    margin: 0px 10px;
 }
 
 #content {
@@ -27,9 +31,10 @@ button {
 #input {
     height: 100%;
     width: 100%;
-    padding: 10px;
+    padding: 20px;
     padding-top: 25px;
     background-color: rgb(58, 128, 58);
+    border-right: 1px solid black;
 }
 
 #input > form {
@@ -39,10 +44,18 @@ button {
     padding: 10px;
 }
 
+form {
+    display: none;
+}
+
 form > div {
     display: flex;
     justify-content: space-between;
     gap: 5px;
+}
+
+input {
+    padding: 5px;
 }
 
 #container {

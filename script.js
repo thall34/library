@@ -1,9 +1,11 @@
 const container = document.getElementById("container");
-const newButton = document.getElementById("new");
-const input = document.getElementById("input")
-
-// dummy variable to check if there's already a new book form active
-let inputCheck = "";
+const input = document.getElementById("input");
+const form = document.getElementById("new-book");
+const submitButton = document.getElementById("submit");
+const title = document.getElementById("title");
+const author = document.getElementById("author");
+const pages = document.getElementById("pages");
+const read = document.getElementById("read");
 
 // array to store book objects
 const myLibrary = [];
@@ -48,111 +50,60 @@ book1.addBookToLibrary(myLibrary);
 book2.addBookToLibrary(myLibrary);
 book3.addBookToLibrary(myLibrary);
 
+// button event to check if input form is valid, and if so creates a new book object
+submitButton.addEventListener("click", () => {
+    if (form.reportValidity()) {
+        let isRead = "";
 
-// button event to create input form
-newButton.addEventListener("click", () => {
-    // if statement checks to see if input form is already open
-    if (inputCheck === "") {
-        inputCheck = "checked"
+        if (read.checked) {
+            isRead = "Read";
+        } else {
+            isRead = "Not Read";
+        };
 
-        const createForm = document.createElement("form");
+        const book = new Book(title.value, author.value, pages.value, isRead);
+        book.addBookToLibrary(myLibrary);
 
-        const titleDiv = document.createElement("div");
-        const authorDiv = document.createElement("div");
-        const pagesDiv = document.createElement("div");
-        const readDiv = document.createElement("div");
+        form.reset();
 
-        const titleLabel = document.createElement("label");
-        titleLabel.for = "title";
-        titleLabel.textContent = "Title:";
+        displayLibrary();
 
-        const inputTitle = document.createElement("input");
-        inputTitle.type = "text";
-        inputTitle.id = "title";
-        inputTitle.name = "title";
+// custom validation checks for Title, Author and Page input fields
+    } else {
+        if (title.validity.valueMissing) {
+            title.setCustomValidity("Please put in the Book Title");
+        } else {
+            title.setCustomValidity("");
+        };
 
-        const authorLabel = document.createElement("label");
-        authorLabel.for = "author";
-        authorLabel.textContent = "Author:";
+        if (author.validity.valueMissing) {
+            author.setCustomValidity("Please put in Author's Name");
+        } else {
+            author.setCustomValidity("");
+        };
 
-        const inputAuthor = document.createElement("input");
-        inputAuthor.type = "text";
-        inputAuthor.id = "author";
-        inputAuthor.name = "author";
-
-        const pagesLabel = document.createElement("label");
-        pagesLabel.for = "pages";
-        pagesLabel.textContent = "# of Pages:";
-
-        const inputPages = document.createElement("input");
-        inputPages.type = "number";
-        inputPages.min = "1";
-        inputPages.max = "41000";
-        inputPages.id = "pages";
-        inputPages.name = "pages";
-
-        const readLabel = document.createElement("label");
-        readLabel.for = "read";
-        readLabel.textContent = "Read?";
-
-        const inputRead = document.createElement("input");
-        inputRead.type = "checkbox";
-        inputRead.id = "read";
-        inputRead.name = "read";
-
-        const submitButton = document.createElement("button");
-        submitButton.id = "submit";
-        submitButton.textContent = "Submit";
-
-        submitButton.addEventListener("click", () => {
-            const getTitle = document.getElementById("title");
-            const getAuthor = document.getElementById("author");
-            const getPages = document.getElementById("pages");
-            const getRead = document.getElementById("read");
-            const title = getTitle.value;
-            const author = getAuthor.value;
-            const pages = getPages.value;
-            let read = "";
-
-            if (getRead.checked) {
-                read = "Read";
+        if (pages.validity.valueMissing) {
+            pages.setCustomValidity("Please put in a number between 1 and 41000");
+        } else {
+            pages.setCustomValidity("");
+            if (pages.validity.rangeUnderflow) {
+                pages.setCustomValidity("this number must be greater than or equal to 1");
+            } else if (pages.validity.rangeOverflow) {
+                pages.setCustomValidity("this number must be less than 41000");
             } else {
-                read = "Not Read";
+                pages.setCustomValidity("");
             };
-
-            const book = new Book(title, author, pages, read);
-            book.addBookToLibrary(myLibrary);
-            
-            input.removeChild(createForm);
-            input.removeChild(submitButton);
-
-            displayLibrary();
-            inputCheck = "";
-        });
-
-        titleDiv.append(titleLabel, inputTitle);
-        authorDiv.append(authorLabel, inputAuthor);
-        pagesDiv.append(pagesLabel, inputPages);
-        readDiv.append(readLabel, inputRead)
-        createForm.append(titleDiv, authorDiv, pagesDiv, readDiv);
-
-        input.appendChild(createForm);
-        input.appendChild(submitButton);
-
-    } else if (inputCheck === "checked") {
-        ;
+        };
     };
 });
 
 // function to output the library book objects as cards in the container div
 function displayLibrary() {
-        container.innerHTML = "";
+    container.innerHTML = "";
 
-        myLibrary.forEach((book) => {
+    myLibrary.forEach((book) => {
         const bookItem = document.createElement("div");
         bookItem.classList.add("card");
-
-        const itemID = book.id;
 
         const itemTitle = document.createElement("p");
         const itemAuthor = document.createElement("p");
@@ -176,7 +127,7 @@ function displayLibrary() {
         });
 
         itemDelete.addEventListener("click", () => {
-            book.removeBook(myLibrary, itemID);
+            book.removeBook(myLibrary, book.id);
             displayLibrary();
         });
 
